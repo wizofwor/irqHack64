@@ -1,4 +1,4 @@
-#Menu & Loader (Old)
+#Menu & Loader (New)
 
 IRQHack64 menü, loader ve arduino'ya yüklenen sketch'in kodları.
 
