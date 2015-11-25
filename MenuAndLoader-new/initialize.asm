@@ -51,14 +51,20 @@
 	bne -
 
 ;--------------------------------------------------
-; INITPC
+; INTERRUPTS
 ;--------------------------------------------------
-INITPC
-	LDX #$00
-	LDA #$0F
--	STA $d800,X
-	STA $d900,X
-	STA $dA00,X
-	STA $dB00,X	
-	INX
-	BNE -
+
+	sei
+
+	LDY #$7f    			; $7f = %01111111 
+    STY $dc0d   			; Turn off CIAs Timer interrupts 
+    STY $dd0d  				; Turn off CIAs Timer interrupts 
+    LDA $dc0d  				; cancel all CIA-IRQs in queue/unprocessed 
+    LDA $dd0d   			; cancel all CIA-IRQs in queue/unprocessed 
+
+    ;Change interrupt routines
+	ASL $D019
+	LDA #$00
+	STA $D01A
+
+	cli

@@ -9,9 +9,6 @@
 	CHARSET1   = $2800
 	CHARSET2   = $3000
 
-	;Kernel locations
-	CHROUT    	= $FFD2
-
 	;Music
 	music		= $1000		;Müzik dosyasinin yuklenecegi adres
 	musicPlay	= music+3	;Müzik player adresi
