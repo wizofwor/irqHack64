@@ -1,0 +1,13 @@
+SCREEN_RAM	= $400
+second_charset	= $42a3	; ?
+charset_data	= $3a23	; ?
+COLOR_RAM	= $d800
+SPRITES	= $2000	; unused
+logo_data	= $3893	; ?
+color_data	= $3ebb	; ?
+music	= $1000
+loop	= $3859
+CHARSET1	= $2800
+CHARSET2	= $3000
+SCINIT	= $ff81	; unused
+musicPlay	= $1003	; unused
