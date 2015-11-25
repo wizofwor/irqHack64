@@ -1,5 +1,9 @@
-	;+CLEAR_SCREEN
+;--------------------------------------------------
+; SET SCREEN
+;--------------------------------------------------
+	+CLEAR_SCREEN
 
+	;set colors
 	lda #$00	;Set border
 	sta $d020
 	lda #$01    ;Set bg#00
@@ -9,6 +13,7 @@
 	lda #$0d	;Set bg#02
 	sta $d023
 
+	;copy character set data
 	ldx #$00
 -	lda charset_data,x
 	sta CHARSET1,x
@@ -28,11 +33,32 @@
 	cpx #$ff
 	bne -
 
+	;copy initial screen and color ram values
 	ldx #$00	
 -	lda logo_data,x
 	sta SCREEN_RAM,x
 	lda color_data,x
 	sta COLOR_RAM,x
 	inx
-	cpx #$c8
+	cpx #$f0
 	bne -
+
+	ldx #$00
+-	lda initialText,x
+	sta SCREEN_RAM+$f0,x
+	inx
+	cpx #15
+	bne -
+
+;--------------------------------------------------
+; INITPC
+;--------------------------------------------------
+INITPC
+	LDX #$00
+	LDA #$0F
+-	STA $d800,X
+	STA $d900,X
+	STA $dA00,X
+	STA $dB00,X	
+	INX
+	BNE -

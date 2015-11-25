@@ -6,3 +6,6 @@ color_data:
 !bin "resources/logo.col"
 second_charset:
 !bin "resources/jetset.char",,1
+
+initialText:
+!scr " irqhack64 menu"
