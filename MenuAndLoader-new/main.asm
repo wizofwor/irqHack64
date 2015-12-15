@@ -8,9 +8,7 @@
 !src "standart.asm"
 !src "global.asm"
 
-+SET_START $3800
-
-sei
++SET_START $c000
 
 !src "initialize.asm"
 !src "loop.asm"

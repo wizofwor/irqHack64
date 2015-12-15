@@ -28,6 +28,11 @@
 	bne .loop
 }
 
+; define a pixel row of a C64 hardware sprite
+!macro SpriteLine .v {
+	!by .v>>16, (.v>>8)&255, .v&255
+}
+
 ; KERNAL ADRESSES
 ;============================================================================
 SCINIT = $FF81

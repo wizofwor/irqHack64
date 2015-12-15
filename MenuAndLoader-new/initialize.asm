@@ -25,9 +25,9 @@
 	sta CHARSET1+$2fd,x
 	lda charset_data+$3fc,x
 	sta CHARSET1+$3fc,x
-	lda second_charset,x
+	lda second_charset_data,x
 	sta CHARSET2,x
-	lda second_charset+$ff,x
+	lda second_charset_data+$ff,x
 	sta CHARSET2+$ff,x
 	inx
 	cpx #$ff
@@ -49,6 +49,58 @@
 	inx
 	cpx #15
 	bne -
+
+;--------------------------------------------------
+; SPRITES
+;--------------------------------------------------
+	ldx #$00	;set sprite pointers
+	lda #$80
+-	sta $07f8,x
+	inx
+	cpx #$08
+	bne -
+
+ 	ldx #$00 		;set sprite colors
+	lda #$0b		
+-	sta $d027,x 
+ 	inx	
+ 	cpx #$08
+	bne -	
+
+	;lda #$FF		;enable all sprites
+	;sta $d015
+
+	lda #$FF 		;extend-sprites
+	;sta $d017
+	sta $d01d
+
+	;lda #15 		;set sprite-x
+	;ldx #00
+-	;sta $d000,x 
+	;inx
+	;inx
+	;cpx #16
+	;bne - 
+
+	lda #128+64 	;Sprite 6 and 7
+	sta $d010 		;in 2nd page
+
+	;ldx #$00 		; Set sprite-y
+	;ldy #$01
+-	;lda spritey,x
+	;sta $d000,y 
+ 	;inx
+ 	;iny
+ 	;iny
+ 	;cpx #$08
+ 	;bne -
+
+	;initialize parameters
+	lda #30
+	sta OFFSET
+
+	lda #60
+	sta TARGET_RASTER	
 
 ;--------------------------------------------------
 ; INTERRUPTS

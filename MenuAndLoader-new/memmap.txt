@@ -1,0 +1,7 @@
+Memory Map
+
+Start 	$0900
+
+
+CHARSET1   = $2800
+CHARSET2   = $3000
