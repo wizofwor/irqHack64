@@ -10,13 +10,17 @@ color_data:
 second_charset_data:
 	!bin "resources/jetset.char",,1
 
-sprite_data:
-	!bin "resources/skull.bin",3*21
+;sprite_data:
+;	!bin "resources/skull.bin",3*21
 
 initialText:
 	!scr " irqhack64 menu"
 
-* = $2000
+* = $2140
 	!bin "resources/skull.bin"
+
+* = music
+
+!bin "resources/First_Dreams.sid",4370,$7c+2
 
 end

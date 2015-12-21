@@ -54,7 +54,7 @@
 ; SPRITES
 ;--------------------------------------------------
 	ldx #$00	;set sprite pointers
-	lda #$80
+	lda #$2140/$40
 -	sta $07f8,x
 	inx
 	cpx #$08
@@ -67,8 +67,8 @@
  	cpx #$08
 	bne -	
 
-	;lda #$FF		;enable all sprites
-	;sta $d015
+	lda #$FF		;enable all sprites
+	sta $d015
 
 	lda #$FF 		;extend-sprites
 	;sta $d017
@@ -103,16 +103,21 @@
 	sta TARGET_RASTER	
 
 ;--------------------------------------------------
+; MUSIC
+;--------------------------------------------------	
+	lda #$00
+	jsr music 		;initilize music
+;--------------------------------------------------
 ; INTERRUPTS
 ;--------------------------------------------------
 
 	sei
 
-	LDY #$7f    			; $7f = %01111111 
-    STY $dc0d   			; Turn off CIAs Timer interrupts 
-    STY $dd0d  				; Turn off CIAs Timer interrupts 
-    LDA $dc0d  				; cancel all CIA-IRQs in queue/unprocessed 
-    LDA $dd0d   			; cancel all CIA-IRQs in queue/unprocessed 
+	LDY #$7f    	; $7f = %01111111 
+    STY $dc0d   	; Turn off CIAs Timer interrupts 
+    STY $dd0d  		; Turn off CIAs Timer interrupts 
+    LDA $dc0d  		; cancel all CIA-IRQs in queue/unprocessed 
+    LDA $dd0d   	; cancel all CIA-IRQs in queue/unprocessed 
 
     ;Change interrupt routines
 	ASL $D019

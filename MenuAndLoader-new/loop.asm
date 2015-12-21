@@ -1,13 +1,23 @@
 mainLoop:
+	;inc $d020
+	jsr musicPlay 	;play music
+	;dec $d020
+
+	inc $07f8 		;set sprite pointers to
+ 	inc $07f9 		;null data
+ 	inc $07fa
+ 	inc $07fb
+ 	inc $07fc
+ 	inc $07fd
+ 	inc $07fe
+ 	inc $07ff
+
 	;-----------------------------------------------------------
 	; Part 1 - logo
 	;-----------------------------------------------------------
  	lda #55 ;wait for raster
 -	cmp $d012
 	bne -
-
-	lda #$00		;disable all sprites
-	sta $d015
 
 	lda #$01
 	sta $d021
@@ -18,9 +28,6 @@ mainLoop:
 	lda #$18 		;switch to multicolor
 	ora $d016
 	sta $d016
-
-
-
 
 
 	;-----------------------------------------------------------
@@ -34,13 +41,14 @@ mainLoop:
 - 	dey 		;flickering
  	bne -
 
- 		;*** Update Sprites for first row ***
-	lda spritey+5
-	clc
- 	adc OFFSET
-
- 	lda #$FF	;enable all sprites
-	sta $d015
+ 	dec $07f8 	;set sprite pointers
+ 	dec $07f9 	;to filled data
+ 	dec $07fa
+ 	dec $07fb
+ 	dec $07fc
+ 	dec $07fd
+ 	dec $07fe
+ 	dec $07ff
 
  	lda #$0c
  	sta $d021
@@ -134,6 +142,19 @@ raster_loop:
     cmp #5
     bne raster_loop
 
+    ;*** update sprites for top row ***
+ 	lda spritey+5 		;load sprite-y from table
+ 	clc 				;and add offset
+ 	adc OFFSET
+
+ 	ldy #00 			;update sprite-y
+- 	sta $d001,y
+ 	iny
+ 	iny
+ 	cpy #16
+ 	bne -	
+
+    ;*** update vertical offset ***
     dec OFFSET
     bne +
     lda #30
@@ -145,7 +166,7 @@ raster_loop:
 
 	jmp mainLoop
 
-rowTable: 	!by 110,140,170,200,230
-spritey: 	!by 112,142,172,202,232,82
+rowTable: 	!by 110,140,170,200,230 			;Raster rows for sprite effect
+spritey: 	!by 115,145,175,205,235,85 			
 spritex:	!by 0,48,96,144,194,242,32,80
 bitTable:	!by 1,2,4,8,16,32,64,128
