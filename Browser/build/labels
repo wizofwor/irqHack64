@@ -1,0 +1,14 @@
+SCREEN_RAM	= $400
+end	= $2112	; unused
+COUNTER	= $2	; unused
+initialText	= $c1dd	; ?
+COLOR_RAM	= $d800	; unused
+main	= $c077
+music	= $1000
+CHARSET1	= $2800	; unused
+CHARSET2	= $3000	; unused
+TARGET_RASTER	= $3	; unused
+SCINIT	= $ff81	; unused
+musicPlay	= $1003	; unused
+OFFSET	= $4	; unused
+CHROUT	= $ffd2	; unused
