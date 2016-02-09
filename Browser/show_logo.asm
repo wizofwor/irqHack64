@@ -4,8 +4,6 @@
 -	cmp $d012
 	bne -
 
-	inc $d020
-
 	lda #%11101110
 	sta $d010	;sprite-x in second page
 
@@ -53,8 +51,6 @@
 	lda #110 		;wait for raster
 -	cmp $d012
 	bne -
-
-	inc $d020
 
 	lda #%11011110
 	sta $d010
@@ -121,8 +117,6 @@
 -	cmp $d012
 	bne -
 
-	inc $d020
-
 	lda #%1110110
 	sta $d010
 
@@ -157,5 +151,5 @@
 	sta $d009
 	sta $d00b
 
-	lda #$00
-	sta $d020
+	;lda #$00
+	;sta $d020

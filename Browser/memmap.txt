@@ -3,6 +3,5 @@ Memory Map
 Start 	$0900
 
 MUSIC 	   = $1000 - $2112
-SPRITE 	   = $2140 - $2180
-CHARSET1   = $2800
-CHARSET2   = $3000
+SPRITE 	   = $2140 - $2740
+CHARSET    = $2800

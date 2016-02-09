@@ -1,10 +1,10 @@
 ;--------------------------------------------------
 ; SET SCREEN
 ;--------------------------------------------------
-	+CLEAR_SCREEN
+	;+CLEAR_SCREEN
 
 	;set colors
-	lda #$0d	;Set border
+	lda #$00	;Set border
 	sta $d020
 	lda #$00    ;Set bg#00
 	sta $d021
@@ -14,41 +14,60 @@
 	sta $d023
 
 	;copy character set data
-	;ldx #$00
--	;lda charset_data,x
-	;sta CHARSET1,x
-	;lda charset_data+$ff,x
-	;sta CHARSET1+$ff,x
-	;lda charset_data+$1fe,x
-	;sta CHARSET1+$1fe,x
-	;lda charset_data+$2fd,x
-	;sta CHARSET1+$2fd,x
-	;lda charset_data+$3fc,x
-	;sta CHARSET1+$3fc,x
-	;lda second_charset_data,x
-	;sta CHARSET2,x
-	;lda second_charset_data+$ff,x
-	;sta CHARSET2+$ff,x
-	;inx
-	;cpx #$ff
-	;bne -
-
-	;copy initial screen and color ram values
-	;ldx #$00	
--	;lda logo_data,x
-	;sta SCREEN_RAM,x
-	;lda color_data,x
-	;sta COLOR_RAM,x
-	;inx
-	;cpx #$f0
-	;bne -
-
 	ldx #$00
--	lda initialText,x
-	sta SCREEN_RAM+$f0,x
+-	lda charset_data,x
+	sta CHARSET,x
+	lda charset_data+$ff,x
+	sta CHARSET+$ff,x
+	lda charset_data+$1fe,x
+	sta CHARSET+$1fe,x
+	lda charset_data+$2fd,x
+	sta CHARSET+$2fd,x
+	lda charset_data+$3fc,x
+	sta CHARSET+$3fc,x
 	inx
-	cpx #15
+	cpx #$ff
 	bne -
+
+	lda #$1b		;set VIC pointers
+	sta $d018 		;screen ram is at $0400, charset is at $2800-$2fff
+
+	lda #$08	;switch to hires
+	and $d016
+	sta $d016
+
+	;copy initial screen values
+	ldx #$ff	
+-	lda screen_data-1,x
+	sta SCREEN_RAM-1,x
+	lda screen_data-1+$fe,x
+	sta SCREEN_RAM-1+$fe,x
+	lda screen_data-1+$1fc,x
+	sta SCREEN_RAM-1+$1fc,x
+	lda screen_data-1+$2fa,x
+	sta SCREEN_RAM-1+$2fa,x
+	dex
+	bne -
+
+	;copy initial color ram values
+	ldx #22
+-	lda #$05
+	sta COLOR_RAM,x
+	lda #$0d
+	sta COLOR_RAM+40,x
+	sta COLOR_RAM+40*24,x
+	lda #$0f
+	!for num,22 {sta COLOR_RAM+40*(num+1),x} 
+	dex
+	bne -
+
+
+	;ldx #$00
+-	;lda initialText,x
+	;sta SCREEN_RAM+$f0,x
+	;inx
+	;cpx #15
+	;bne -
 ;--------------------------------------------------
 ; SPRITES
 ;--------------------------------------------------	

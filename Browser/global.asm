@@ -5,7 +5,7 @@
 	;vic-ii data locations
 	SCREEN_RAM = $0400
 	COLOR_RAM  = $d800
-	CHARSET1   = $2800
+	CHARSET    = $2800
 	CHARSET2   = $3000
 
 	;Music
