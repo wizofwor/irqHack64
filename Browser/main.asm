@@ -8,7 +8,7 @@
 !src "standart.asm"
 !src "global.asm"
 
-+SET_START $c000
++SET_START $0900
 
 !src "initialize.asm"
 

@@ -1,9 +1,9 @@
 SCREEN_RAM	= $400
 COUNTER	= $2	; unused
 charset_data	= $2800	; ?
-initialText	= $c251	; unused
+initialText	= $b51	; unused
 COLOR_RAM	= $d800
-main	= $c0f9
+main	= $9f9
 CHARSET	= $2800
 screen_data	= $3000	; ?
 num	= $16
