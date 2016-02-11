@@ -37,17 +37,33 @@
 	sta $d016
 
 	;copy initial screen values
-	ldx #$ff	
--	lda screen_data-1,x
-	sta SCREEN_RAM-1,x
-	lda screen_data-1+$fe,x
-	sta SCREEN_RAM-1+$fe,x
-	lda screen_data-1+$1fc,x
-	sta SCREEN_RAM-1+$1fc,x
-	lda screen_data-1+$2fa,x
-	sta SCREEN_RAM-1+$2fa,x
+!zone memCopy {		
+.fetchNewData:
+	fetchPointer1=*+1 	;mark self modiying address
+	lda filler_bytes 	;read char value into A
+	fetchPointer2=*+1 
+	ldx repeat_bytes 	;read repeat value into x
+	beq .end 			;finish copying if x=0
+
+	inc fetchPointer1
+	bne *+5
+	inc fetchPointer1+1
+	inc fetchPointer2
+	bne *+5
+	inc fetchPointer2+1
+
+	fillPointer=*+1
+-	sta SCREEN_RAM
+	inc fillPointer
+	bne *+5
+	inc fillPointer+1
+
 	dex
 	bne -
+
+	jmp .fetchNewData
+.end	
+}
 
 	;copy initial color ram values
 	ldx #22
