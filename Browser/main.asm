@@ -14,6 +14,7 @@
 
 main:
 	!src "show_logo.asm"
+	!src "controls.asm"
 
 jmp main
 

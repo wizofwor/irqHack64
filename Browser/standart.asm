@@ -28,12 +28,20 @@
 	bne .loop
 }
 
+!macro inc16 .address{
+	inc .address
+	bne *+5
+	inc .address+1
+}
+
 ; define a pixel row of a C64 hardware sprite
 !macro SpriteLine .v {
 	!by .v>>16, (.v>>8)&255, .v&255
 }
 
-; KERNAL ADRESSES
+; KERNAL ROUTUNES
 ;============================================================================
 SCINIT = $FF81
 CHROUT = $FFD2
+GETIN  = $FFE4
+SCNKEY =  $FF9F 

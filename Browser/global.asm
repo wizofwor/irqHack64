@@ -13,7 +13,9 @@
 	musicPlay	= music+3	;Müzik player adresi
 
 	;zp adresses
-	COUNTER = $02
-	TARGET_RASTER = $03
-	OFFSET = $04
+	SPRITE_STATE  = $02
+	ACTIVE_ITEM   = $03
+	HIGHLIGHT_LO = $04
+	HIGHLIGHT_HI = $05
+
 
