@@ -15,6 +15,7 @@
 main:
 	!src "show_logo.asm"
 	!src "controls.asm"
+	jsr musicPlay
 
 jmp main
 

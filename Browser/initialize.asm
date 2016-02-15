@@ -69,10 +69,14 @@
 .end	
 }
 
-	lda <SCREEN_RAM+121
-	sta HIGHLIGHT_LO
-	lda >SCREEN_RAM+121
-	sta HIGHLIGHT_HI
+	;***initialize color wash effect for active menu item
+	lda #00
+	sta ACTIVE_ITEM
+	lda #<COLOR_RAM+120
+	sta ACTIVE_ROW
+	lda #>COLOR_RAM+120
+	sta ACTIVE_ROW+1
+
 
 ;--------------------------------------------------
 ; SPRITES
