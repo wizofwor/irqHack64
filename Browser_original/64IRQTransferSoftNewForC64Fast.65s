@@ -26,6 +26,7 @@ START
 	STX $D016				; Turn on VIC for PAL / NTSC check
 	JSR $FDA3				; IOINIT - Init CIA chips
 	JSR $FD50				; RANTAM - Clear/test system RAM
+	;JSR ALTRANTAM				; Metallic's fast alternative to RANTAM
 	JSR $FD15				; RESTOR - Init KERNAL RAM vectors
 	JSR $FF5B				; CINT   - Init VIC and screen editor
 	CLI					; Re-enable IRQ interrupts	
@@ -62,6 +63,8 @@ START
 	LDA #$00
 	STA $D01A
 		
+		
+; 	Place the metadata transfer routine into the nmi vector.
 	LDA #<STARTNMI
 	STA NMI_LO
 	LDA #>STARTNMI
@@ -69,19 +72,22 @@ START
 	
     	LDA #01					
    	STA BORDER
-   			
+   	
+;	Foreground loop that waits the nmi handlers to do their job.   			
 	CLI	
 	LDY #$00	
 	CLV	
 	STY BITTARGET
 WAIT
 	BIT BITTARGET	
-	BVC WAIT	
+	BVC WAIT
+;	Nmi handlers finished with the loading of the program.		
 	CLV
 	
     	LDA #02					
    	STA BORDER
 	
+;	Execute loaded program	
 	LDA #$37				;Restore default memory layout
 	STA $01	
 	
@@ -118,6 +124,10 @@ STARTNMI
     	LDA #07					
    	STA BORDER
 ; Only initial meta 4 bytes will be transferred with this routine
+; It switches to the fast nmi routine upon receiving the inital 4 bytes metadata.
+; The logic in doing so is to take the burden of initialization of zero page variables
+; for the actual indirect indexed transfer which takes 25 cycles for the initial 255 bytes of a page.
+; Last bytes of the pages takes a bit longer and micro is responsible to wait longer for these bytes.
 P1
 	LDA #$EA				; #$EA is a template variable
 	STA DATA_LOW,Y
@@ -155,15 +165,37 @@ OUTBLOCK
 						; self modifying code since this code is in rom.
 	RTI		
 	
-	
-
+ALTRANTAM	
+        LDA #0          ; $fd50 replacement starts here        
+        TAY
+LOOPTEST        
+	STA $0002,y
+        STA $0200,y        
+        STA $0300,y        
+        INY       
+        BNE LOOPTEST        
+        LDX #$3c        
+        LDY #3       
+        STX $b2        
+        STY $b3       
+        LDX #0        
+        LDY #$a0       
+        STX $0283       ; highest ram address for Basic       
+        STY $0284       ;       
+        STX $c1      
+        STY $c2      
+        LDA #8      
+        STA $0282        
+        LSR 		;LDA #4        
+        STA $0288       ; $fd50 replacement ends here
+        RTS
 		
 
 ;CHARARRAY
 ;	.BYTE 48, 49, 50, 51, 52, 53, 54, 55, 56, 57,  1, 2, 3, 4, 5, 6
 	
-	*=$80FF
-	NOP	
+	;*=$80FF
+	;NOP	
 ; Performance summary 
 ; 44kb file is 176 blocks (4 * STARTNMI is insignificant)
 ; =~ 45056 NMI + 176 IRQ
