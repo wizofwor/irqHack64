@@ -3,7 +3,7 @@
 !bin "resources/sprites.bin",1536
 
 * = music
-!bin "resources/First_Dreams.sid",4370,$7c+2
+!bin "resources/Jamaica_10_intro.sid",3167,$7c+2
 
 * = $2800
 charset_data:
