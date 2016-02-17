@@ -4,27 +4,23 @@
 ;##############################################################################
 
 ;fill screen with test data
-!zone fill {
-	ldx #00
--	lda title,x
-	sta SCREEN_RAM+41,x
-	inx
-	cpx #16
-	bne -
-
-	!for i,21 {
-	ldx #00
--	lda text,x
-	sta SCREEN_RAM+81+40*i,x
-	inx
-	cpx #16
-	bne -	
-	}
-}
-
-;highlight
-
-
+;!zone fill {
+;	ldx #00
+;-	lda title,x
+;	sta SCREEN_RAM+41,x
+;	inx
+;	cpx #16
+;	bne -
+;
+;	!for i,1,21 {
+;	ldx #00
+;-	lda text,x
+;	sta SCREEN_RAM+81+40*i,x
+;	inx
+;	cpx #16
+;	bne -	
+;	}
+;}
 
 
 !zone highlight {
@@ -53,8 +49,9 @@
 	bne -
 
 	;increment ACTIVE_ITEM
-	lda #20 			;check if the cursor is
-	cmp ACTIVE_ITEM 	;already at end of page
+	ldx numberOfItems 	;check if the cursor is
+	dex 				;already at end of page
+	cpx ACTIVE_ITEM 	
 	beq .end
 	inc ACTIVE_ITEM
 

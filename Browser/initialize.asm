@@ -32,12 +32,12 @@
 	lda #$1b		;set VIC pointers
 	sta $d018 		;screen ram is at $0400, charset is at $2800-$2fff
 
-	lda #$08	;switch to hires
+	lda #$08		;switch to hires
 	and $d016
 	sta $d016
 
-	;copy initial screen values
-!zone memCopy {		
+	
+!zone memCopy {		;copy initial screen values
 .fetchNewData:
 	;***read***
 	.fetchPointer1=*+1 	;read repeat value 
@@ -68,6 +68,16 @@
 	jmp .fetchNewData
 .end	
 }
+	;***Print title
+	ldx #00
+-	lda title,x
+	sta SCREEN_RAM+41,x
+	inx
+	cpx #16
+	bne -
+
+	;***Print initial filenames
+	jsr printPage
 
 	;***initialize color wash effect for active menu item
 	lda #00

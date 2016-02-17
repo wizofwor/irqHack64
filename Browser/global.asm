@@ -35,3 +35,28 @@
 ;Nmi handler on the cart changes the handler to the fast one upon these 4 bytes finishes transferring.
 CARTRIDGENMIHANDLER = $80BB ;$809a	
 
+;Zero page addresses used to address screen
+COLLOW	  	= $FB
+COLHIGH	  	= $FC
+
+;Zero page addresses used to access file names
+NAMELOW	  	= $FD
+NAMEHIGH  	= $FE
+
+;Loader on the cartridge rom sets the 6th bit of this location. Which is tested by BIT $64
+;command and waiting if overflow flag (which is the 6th bit of this location) is clear.
+BITTARGET	= $64
+
+;Next page command
+COMMANDNEXTPAGE = $43
+
+;Previous page command
+COMMANDPREVPAGE = $41
+
+;Part of the command byte that flags controlling micro that a file/folder is selected.
+COMMANDENTERMASK = $01
+
+numberOfItems	= $2CF0
+numberOfPages		= $2CF1
+PAGEINDEX		= $2CF2
+itemList		= $2D00
