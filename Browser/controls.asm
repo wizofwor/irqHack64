@@ -3,27 +3,7 @@
 ; Menu Controls
 ;##############################################################################
 
-;fill screen with test data
-;!zone fill {
-;	ldx #00
-;-	lda title,x
-;	sta SCREEN_RAM+41,x
-;	inx
-;	cpx #16
-;	bne -
-;
-;	!for i,1,21 {
-;	ldx #00
-;-	lda text,x
-;	sta SCREEN_RAM+81+40*i,x
-;	inx
-;	cpx #16
-;	bne -	
-;	}
-;}
-
-
-!zone highlight {
+!zone keyboardScan {
 	jsr SCNKEY		; Call kernal's key scan routine
  	jsr GETIN		; Get the pressed key by the kernal routine
  	cmp #$2d 		; IF char is '-'
@@ -35,10 +15,12 @@
  	cmp #$2c 		; IF char is '<'
  	;beq .prevpage 	; request previous page from micro
  	cmp #$0d 		; IF char is 'ENTER'
- 	;beq .enter 		; lauch selected item
+ 	beq j1 			; launch selected item
     cmp #$0f 		; IF char is 'F'
     ;beq .simulation ; Display simulation menu
  	jmp .end
+
+j1: jmp enter
 
 .down
 	;clear old coloring
