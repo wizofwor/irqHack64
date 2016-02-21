@@ -1,123 +1,130 @@
-	;************* first and second row *********
+;###############################################################################
+; show_logo.asm
+; display sprite logo
+;###############################################################################
+!zone show_logo {
+	;**********  increment animation counter *********
+	inc spAnimationCounter
+	lda spAnimationCounter
+	cmp #64
+	bne +
+	lda #00
+	sta spAnimationCounter
++	
+	ldx spAnimationCounter
+	lda spriteSinus,x
+	sta var1
 
+	;********** print first and second row ***********
 	lda #60 		;wait for raster
 -	cmp $d012
 	bne -
 
-	lda #%11101110
-	sta $d010	;sprite-x in second page
-
 	;set sprite pointers
-	ldx #$00
 	lda #spriteBase/$40
--	sta $07f8,x
-	clc
-	adc #$01 
-	inx 
-	cpx #08
-	bne -
+	jsr .setSpritePointers
 
 	;set spriteX
-	ldx #$00
-	ldy #$00
--	lda spriteX,x
-	sta $d000,y
-	sta $d008,y
-	iny
-	iny
-	inx
-	cpx #04
-	bne -
+	jsr .setSpriteX
 
+	;set sprite Y
 	lda spriteY+0
-	sta $d001
-	sta $d003
-	sta $d005
-	sta $d007
-	lda spriteY+1
-	sta $d009
-	sta $d00b
-	sta $d00d
-	sta $d00f
+	ldy spriteY+1
+	jsr .setSpriteY
 
-	;********* third row *********
-	lda #108 		;wait for raster
+	;*********** print third and fourth row **********
+	lda #106 		;wait for raster
 -	cmp $d012
 	bne -
 
+	;increase swing offset
+	ldx spAnimationCounter
+	lda spriteSinus+21,x
+	sta var1
+
 	;set sprite pointers
-	ldx #$00
 	lda #spriteBase/$40+8
--	sta $07f8,x
-	clc
-	adc #$01 
-	inx 
-	cpx #08
-	bne -
+	jsr .setSpritePointers
 
 	;set sprite X
-	ldx #$00
-	ldy #$00
--	lda spriteX,x
-	sta $d000,y
-	sta $d008,y
-	iny
-	iny
-	inx
-	cpx #04
-	bne -
+	jsr .setSpriteX
 
-	dec $d000 	;mind the gap
+	;mind the gap :)
+	dec $d000 	
 	dec $d000
 	dec $d008
 	dec $d008
 
 	;set sprite Y
 	lda spriteY+2
+	ldy spriteY+3
+	jsr .setSpriteY
+
+	;********* print Fifth & sixth row ***************
+	lda #153 		;wait for raster
+-	cmp $d012
+	bne -
+
+	;set sprite pointers
+	lda #spriteBase/$40+16
+	jsr .setSpritePointers
+
+	;increase swing offset
+	ldx spAnimationCounter
+	lda spriteSinus+42,x
+	sta var1
+
+	;set sprite X
+	jsr .setSpriteX
+
+	;set sprite Y
+	lda spriteY+4
+	ldy spriteY+5
+	ldx #4
+	jsr .setSpriteY
+
+
+
+	jmp .end ;skip subroutines
+
+	;********* Subroutines *************************
+.setSpriteX
+	ldx #$00
+	ldy #$00
+-	clc
+	lda spriteX,x
+	adc var1 
+	sta $d000,y
+	sta $d008,y
+	iny
+	iny
+	inx
+	cpx #04
+	bne -
+	rts
+
+.setSpriteY	
 	sta $d001
 	sta $d003
 	sta $d005
 	sta $d007
-	lda spriteY+3
-	sta $d009	
-	sta $d00b
-	sta $d00d
-	sta $d00f
+	sty $d009
+	sty $d00b
+	sty $d00d
+	sty $d00f
+	rts
 
-	;********* Fifth & eight row *********
-	lda #154 		;wait for raster
--	cmp $d012
-	bne -
-
-	lda #%1110110
-	sta $d010
-
+.setSpritePointers
 	ldx #$00
-	lda #spriteBase/$40+16
+	;lda #spriteBase/$40
 -	sta $07f8,x
 	clc
 	adc #$01 
 	inx 
 	cpx #08
-	bne -
+	bne -	
+	rts
 
-	;set sprite X
-	ldx #$00
-	ldy #$00
--	lda spriteX,x
-	sta $d000,y
-	sta $d006,y
-	iny
-	iny
-	inx
-	cpx #03
-	bne -
-
-	lda spriteY+4
-	sta $d001
-	sta $d003
-	sta $d005
-	lda spriteY+5
-	sta $d007
-	sta $d009
-	sta $d00b
+	;********* end *************************
+.end
+}
