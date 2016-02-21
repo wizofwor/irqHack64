@@ -55,3 +55,7 @@ spriteBase:
 * = $2800
 charset_data:
 !bin "resources/charset.bin",1000
+FINAL:
+
+* = $2BEF
+!by $EA

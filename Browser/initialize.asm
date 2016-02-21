@@ -67,6 +67,32 @@
 
 	jmp .fetchNewData
 .end	
+; Deðiþtirilen operand'larýn tekrar init edilmesi, 
+; gerek var mý bilemediðim için comment'ledim - nejat
+;	lda #<repeat_bytes
+;	sta .fetchPointer1
+;	lda #>repeat_bytes
+;	sta .fetchPointer1+1
+	
+;	lda #<char_bytes
+;	sta .fetchPointer2
+;	lda #>char_bytes
+;	sta .fetchPointer2+1
+	
+;	lda #<color_bytes
+;	sta .fetchPointer3
+;	lda #>color_bytes
+;	sta .fetchPointer3+1	
+	
+;	lda #<SCREEN_RAM
+;	sta .charFillPointer
+;	lda #>SCREEN_RAM
+;	sta .charFillPointer+1	
+	
+;	lda #<COLOR_RAM
+;	sta .colorFillPointer
+;	lda #>COLOR_RAM
+;	sta .colorFillPointer+1	
 }
 	;***Print title
 	ldx #00

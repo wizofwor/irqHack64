@@ -23,38 +23,39 @@ IRQVECTOR		= $0314
 ROMNMIHANDLER	= $FE47 ;Kernal NMI handler - used to restore nmi handler on nmi vector.
 ROMIRQHANDLER	= $FF48 ;Kernal IRQ handler - not used
 
-numberOfItems	= $2CF0
-numberOfPages	= $2CF1
-PAGEINDEX		= $2CF2
-itemList		= $2D00
+numberOfItems	= $2BF0
+numberOfPages	= $2BF1
+PAGEINDEX		= $2BF2
+itemList		= $2C00
 
 ;ZERO PAGE ADRESSES
 ;============================================================================
-SPRITE_STATE  	= $02
-ACTIVE_ITEM   	= $03 	;Selected row's number
-ACTIVE_ROW 	  	= $04 	;Selected row's first color ram address
-RESERVED 	  	= $05 	;hi byte for active row's color ram addres
+SPRITE_STATE  	= $10
+ACTIVE_ITEM   	= $12 	;Selected row's number
+ACTIVE_ROW 	  	= $14 	;Selected row's first color ram address
+				;hi byte for active row's color ram addres
+RESERVED 	  	= $05 	;Not used				
 
 ;Starting address of fo data transferred. Menu uses this location to get next / previous
 ;page of contents from micro.
 ;DATA_HIGH is not incremented by the loader. Instead ACTUAL_HIGH is used.
 ;DATA_LOW, DATA_HIGH is also used to launch the loaded program by the loader.
-DATA_LOW 	  	= $06 	
-DATA_HIGH 	  	= $07
-DATA_LENGTH   	= $08 	;Length (page) of data to be transferred
+DATA_LOW 	  	= $03 	
+DATA_HIGH 	  	= $04
+DATA_LENGTH   	= $05 	;Length (page) of data to be transferred
 	
 ;These are set to DATA_LOW and DATA_HIGH respectively before transfer. 
 ;Loader uses these locations for actual transfer.
-ACTUAL_LOW		= $09   
-ACTUAL_HIGH   	= $0a
+ACTUAL_LOW		= $07   
+ACTUAL_HIGH   	= $08
 
 ;Zero page addresses used to address screen
-COLLOW	  		= $FB
-COLHIGH	  		= $FC
+;COLLOW	  		= $FB
+;COLHIGH	  		= $FC
 
 ;Zero page addresses used to access file names
-NAMELOW	  		= $FD
-NAMEHIGH  		= $FE
+;NAMELOW	  		= $FD
+;NAMEHIGH  		= $FE
 
 ;Loader on the cartridge rom sets the 6th bit of this location. Which is tested by BIT $64
 ;command and waiting if overflow flag (which is the 6th bit of this location) is clear.

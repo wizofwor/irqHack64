@@ -5,10 +5,18 @@
 !zone printPage { 	
 ;Prints the initial filenames that's added to the program by the micro.
 printPage: 
-	ldx numberOfItems
+	;Onceki sayfanin icerigi temizlensin diye default 20'ye set ettim - nejat
+	;ldx numberOfItems
+	ldx #20
 --	ldy #20
 	.fetchPointer=*+1
 -	lda itemList-1,y
+	;petscii -> screen code - nejat
+	cmp #$3f
+	bmi +
+	clc
+	sbc #$3f
++
 	.fillPointer=*+1
 	sta SCREEN_RAM+121,y
 
@@ -34,6 +42,16 @@ printPage:
 	dex
 	bne --
 
+	;Self modify ile deðiþmiþ adresleri tekrar init - nejat
+	lda #<itemList-1
+	sta .fetchPointer
+	lda #>itemList-1
+	sta .fetchPointer+1
+	
+	lda #<SCREEN_RAM+121
+	sta .fillPointer
+	lda #>SCREEN_RAM+121
+	sta .fillPointer+1
 	rts
 }
 
@@ -139,9 +157,11 @@ WAITNMI
 	BIT BITTARGET	
 	BVC WAITNMI	
 	CLV
-		
+	
+	JSR ENDTRANSFER
+	JSR ENABLEDISPLAY
 	jsr printPage ;Update the screen with the new content got from micro		
-
+	jmp main
 	cli
 	;jmp INPUT_GET
   	
@@ -302,19 +322,23 @@ IRQHANDLE2CONT
 ;-------------------------------------------------------
 killCIA
 	LDY #$7f    ; $7f = %01111111 
-    STY $dc0d   ; Turn off CIAs Timer interrupts 
-    STY $dd0d   ; Turn off CIAs Timer interrupts 
-    LDA $dc0d   ; cancel all CIA-IRQs in queue/unprocessed 
-    LDA $dd0d   ; cancel all CIA-IRQs in queue/unprocessed 
+    	STY $dc0d   ; Turn off CIAs Timer interrupts 
+    	STY $dd0d   ; Turn off CIAs Timer interrupts 
+    	LDA $dc0d   ; cancel all CIA-IRQs in queue/unprocessed 
+    	LDA $dd0d   ; cancel all CIA-IRQs in queue/unprocessed 
 	RTS	
 
 DISABLEINTERRUPTS
-    LDY #$7f    			; $7f = %01111111 
-    STY $dc0d   			; Turn off CIAs Timer interrupts 
-    STY $dd0d  				; Turn off CIAs Timer interrupts 
-    LDA $dc0d  				; cancel all CIA-IRQs in queue/unprocessed 
-    LDA $dd0d   			; cancel all CIA-IRQs in queue/unprocessed 
-
+    	LDY #$7f    			; $7f = %01111111 
+    	STY $dc0d   			; Turn off CIAs Timer interrupts 
+    	STY $dd0d  				; Turn off CIAs Timer interrupts 
+    	LDA $dc0d  				; cancel all CIA-IRQs in queue/unprocessed 
+    	LDA $dd0d   			; cancel all CIA-IRQs in queue/unprocessed 
+    	;Change interrupt routines
+    	ASL $D019
+    	LDA #$00
+    	STA $D01A
+    	RTS
 GETCURRENTROW	; Input : None, Output : X (current row)
 	LDX ACTIVE_ITEM
 	RTS	
@@ -357,7 +381,7 @@ INITTRANSVAR
 	LDA #$F0
 	STA DATA_LOW
 	STA ACTUAL_LOW
-	LDA #$1C
+	LDA #$2B
 	STA DATA_HIGH
 	STA ACTUAL_HIGH	
 	LDA #$03
@@ -391,11 +415,15 @@ NMIROUTINE
 	RTI	
 
 DISABLEDISPLAY
+	LDA #$00
+	STA $D015				;Disable sprites
 	LDA #$0B				;%00001011 ; Disable VIC display until the end of transfer
 	STA $D011	
 	RTS
 
 ENABLEDISPLAY
+	LDA #$FF
+	STA $D015				;Enable sprites
 	LDA #$1B				;%00001011 ; Disable VIC display until the end of transfer
 	STA $D011	
 	RTS				
