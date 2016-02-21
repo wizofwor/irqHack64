@@ -102,11 +102,11 @@
 	lda #$01 	;set sprite multicolor 1
 	sta $d025	
 
-	lda #$03 	;set sprite multicolor 2
+	lda #$06 	;set sprite multicolor 2
 	sta $d026
 
 	ldx #$08	;set sprite colors
-	lda #$0d
+	lda #$0e
 -	sta $d026,x
 	dex
 	bne -
