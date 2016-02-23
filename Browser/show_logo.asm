@@ -15,6 +15,30 @@
 	lda spriteSinus,x
 	sta var1
 
+	;***********  color wash effect ******************
+	inc spColorWashCounter
+	lda spColorWashCounter
+	cmp #64
+	bne +
+	lda #00
+	sta spColorWashCounter
++	
+	ldx spColorWashCounter
+	lda spColorOffset,x
+	tax
+
+	lda spColor1,x 	;set sprite multicolor 1
+	sta $d025	
+
+	lda spColor2,x 	;set sprite multicolor 2
+	sta $d026
+
+	ldy #$08	;set sprite colors
+	lda spColor3,x
+-	sta $d026,y
+	dey
+	bne -
+
 	;********** print first and second row ***********
 	lda #60 		;wait for raster
 -	cmp $d012

@@ -30,6 +30,7 @@ itemList		= $2C00
 ;ZERO PAGE ADRESSES
 ;============================================================================
 spAnimationCounter = $10
+spColorWashCounter = $11
 ACTIVE_ITEM   	= $12 	;Selected row's number
 ACTIVE_ROW 	  	= $14 	;Selected row's first color ram address
 ;           	= $15   ;hi byte for active row's color ram addres
