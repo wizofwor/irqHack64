@@ -11,15 +11,38 @@
  	cmp #$2b 		; IF char is '+'
  	beq .up 		; go up in menu
  	cmp #$2e 		; IF char is '>'
- 	;beq .nextpage 	; request next page from micro
+ 	beq .nextPage 	; request next page from micro
  	cmp #$2c 		; IF char is '<'
- 	;beq .prevpage 	; request previous page from micro
+ 	beq .prevPage 	; request previous page from micro
  	cmp #$0d 		; IF char is 'ENTER'
  	beq j1 			; launch selected item
     cmp #$0f 		; IF char is 'F'
     ;beq .simulation ; Display simulation menu
  	jmp .end
 
+.nextPage
+	ldx PAGEINDEX
+	cpx numberOfPages	  	
+	bcc .execNext	;BLT
+	jmp .end
+	
+.execNext
+
+	inc PAGEINDEX
+	ldx #COMMANDNEXTPAGE
+	stx COMMANDBYTE
+	jmp j1
+	
+.prevPage
+	ldx PAGEINDEX
+	bne .execPrev
+	jmp .end
+	
+.execPrev
+	dec PAGEINDEX
+	ldx #COMMANDPREVPAGE
+	stx COMMANDBYTE	
+	
 j1: jmp enter
 
 .down

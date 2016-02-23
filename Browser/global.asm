@@ -27,6 +27,7 @@ numberOfItems	= $2BF0
 numberOfPages	= $2BF1
 PAGEINDEX		= $2BF2
 itemList		= $2C00
+MICROLOADSTART	= numberOfItems
 
 ;ZERO PAGE ADRESSES
 ;============================================================================
@@ -60,9 +61,10 @@ ACTUAL_HIGH   	= $08
 ;Loader on the cartridge rom sets the 6th bit of this location. Which is tested by BIT $64
 ;command and waiting if overflow flag (which is the 6th bit of this location) is clear.
 BITTARGET		= $64
-
+COMMANDINIT		= $45 ;Init command (Micro sends initial state of sd card)
 COMMANDNEXTPAGE = $43 ;Next page command
 COMMANDPREVPAGE = $41 ;Previous page command
 COMMANDENTERMASK= $01 ;Part of the command byte that flags controlling micro that a file/folder is selected.
+WAITCOUNT		= 100 ; Frame count to wait between Launching & requesting file list from micro
 
 

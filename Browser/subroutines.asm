@@ -5,6 +5,8 @@
 !zone printPage { 	
 ;Prints the initial filenames that's added to the program by the micro.
 printPage: 
+	LDX #COMMANDENTERMASK
+	STX COMMANDBYTE
 	;Onceki sayfanin icerigi temizlensin diye default 20'ye set ettim - nejat
 	;ldx numberOfItems
 	ldx #20
@@ -127,6 +129,7 @@ WAITRASTER2
 ENABLERASTER	
 	LDA #$01
 	STA $D01A	;Enable raster interrupts
+	CLI
 
 	LDY #$00	
 	CLV	
@@ -135,7 +138,7 @@ ENABLERASTER
 WAITIRQ 		; Wait till the command byte transferred to the micro
 	BIT BITTARGET	
 	BVC WAITIRQ	
-	CLV		
+	CLV	
 
 ; Command is transferred. Prepare loader for the transferring of the actual stuff
 ; If it's a program then micro resets c64 so below code is not relevant.
@@ -378,10 +381,10 @@ CONSUME
 	RTS
 
 INITTRANSVAR
-	LDA #$F0
+	LDA #<MICROLOADSTART
 	STA DATA_LOW
 	STA ACTUAL_LOW
-	LDA #$2B
+	LDA #>MICROLOADSTART
 	STA DATA_HIGH
 	STA ACTUAL_HIGH	
 	LDA #$03
@@ -397,22 +400,6 @@ ENDTRANSFER
 	STA SOFTNMIVECTOR+1
 	RTS
 		
-NMIROUTINE
-	PHA
-	TXA
-	PHA
-	TYA
-	PHA
-	
-	JSR $C000	; Call play
-	
-	LDA $DD0D	; Acknowledge
-	PLA
-	TAY
-	PLA 
-	TAX
-	PLA
-	RTI	
 
 DISABLEDISPLAY
 	LDA #$00

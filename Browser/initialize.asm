@@ -103,7 +103,7 @@
 	bne -
 
 	;***Print initial filenames
-	jsr printPage
+	;jsr printPage
 
 	;***initialize color wash effect for active menu item
 	lda #00
@@ -162,3 +162,28 @@
 	STA $D01A
 
 	;cli
+	
+	
+	
+;--------------------------------------------------
+; INITIAL WAIT BEFORE REQUESTING FILE LIST
+;--------------------------------------------------
+	;Buradaki döngü mantýðý show_logo içine yedirilirse logo'yu da gösterebiliriz açýlýþta.
+	;Mantýk olarak ekranda gösterilecek yazý vesaire için bir süre býrakmak için.
+	;Arduino da yarým saniye kadar menüyü gönderdikten sonra bekliyor. (Niye koyduðumu hatýrlayamadým þimdi.)
+	LDX #WAITCOUNT
+	LDA #$90		; Raster line to wait. Not a specific one. Just that VIC doesn't have A0 line 
+					; which has the 8th bit set to 1. 
+--	
+	CMP $D012
+	BNE --
+	LDY #$00
+-	
+	INY				; Consume current line and a few lines more..
+	BNE -
+	DEX				; Decrement wait counter
+	BNE --
+	
+	LDA #COMMANDINIT
+	STA COMMANDBYTE
+	JMP enter
