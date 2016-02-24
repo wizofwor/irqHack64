@@ -1,6 +1,6 @@
 ;###############################################################################
-; IRQHack64 Cartridge Main Menu - by wizofwor
-; November 2015
+; IRQHack64 Cartridge Main Menu - by wizofwor/i_r_on
+; November 2015 - February 2016
 ;###############################################################################
 !to "build/menu.prg",cbm
 

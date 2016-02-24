@@ -1,12 +1,11 @@
-;--------------------------------------------------------------
+;###############################################################################
 ;	Global.asm
-;--------------------------------------------------------------
+;###############################################################################
 
 ;vic-ii data locations
 SCREEN_RAM 	= $0400
 COLOR_RAM  	= $d800
 CHARSET    	= $2800
-CHARSET2   	= $3000
 
 ;Music
 music		= $1000		;Müzik dosyasinin yuklenecegi adres
@@ -31,11 +30,16 @@ MICROLOADSTART	= numberOfItems
 
 ;ZERO PAGE ADRESSES
 ;============================================================================
-SPRITE_STATE  	= $10
+spAnimationCounter = $10
+spColorWashCounter = $11
 ACTIVE_ITEM   	= $12 	;Selected row's number
 ACTIVE_ROW 	  	= $14 	;Selected row's first color ram address
-				;hi byte for active row's color ram addres
-RESERVED 	  	= $05 	;Not used				
+;           	= $15   ;hi byte for active row's color ram addres
+RESERVED 	  	= $05 	;Not used
+
+;temprary variables
+var1 			= $18 
+var2 			= $19				
 
 ;Starting address of fo data transferred. Menu uses this location to get next / previous
 ;page of contents from micro.
