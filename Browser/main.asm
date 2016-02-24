@@ -2,18 +2,18 @@
 ; IRQHack64 Cartridge Main Menu - by wizofwor
 ; November 2015
 ;###############################################################################
-SIMULATION = 0
-
 !to "build/menu.prg",cbm
 
-!src "standart.asm"
-!src "global.asm"
+SIMULATION = 1 			;0 to compile for read cartrige
+						;1 to compile with simulation routines
 
-!if SIMULATION  { !src "simulationData.asm" }
+!src "standart.asm" 	;standard macros & kernal adresses definition 
+!src "global.asm" 		;global labels & zp adresses
+;--------------------------------------------------------------------------------
 
 +SET_START $0900
 
-!src "initialize.asm"
+	!src "initialize.asm"
 
 main:
 	!src "show_logo.asm"
@@ -23,5 +23,6 @@ main:
 
 jmp main
 
+;--------------------------------------------------------------------------------
 !src "subroutines.asm"
 !src "data.asm"
