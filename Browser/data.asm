@@ -24,6 +24,8 @@ color_bytes:
 !for n,1,21 {!by $0d,$0f,$0b,$0d,$00}
 !by $05,$0d,$0d,$00,$00
 
+* = $3000 ;walkaround for is segment override problem 
+
 spriteX:
 !by 232,0,24,48
 
@@ -43,6 +45,7 @@ spColorOffset:
 !by 0,0,0,0,0,0,0,0,0,1,1,1,1,2,2,2
 !by 3,3,3,4,4,4,4,5,5,5,5,5,5,5,5,5
 !by 5,5,5,5,5,5,5,5,4,4,4,4,3,3,3,3
+!fill 65,0
 
 spColor1: !by 1,1,15,12,11,0
 spColor2: !by 6,6,6,11,11,0
@@ -54,11 +57,11 @@ spColor3: !by 14,14,4,12,11,0
 
 title:
 !scr "/micro sd       "
-text:
-!scr " menu item 12345"
+;text:
+;!scr " menu item 12345"
 
-lookup:
-!by 4,44,84,214
+;lookup:
+;!by 4,44,84,214
 
 menuState:
 !by 0			; Menu state (0 = Launched, 1 = Got list from micro)

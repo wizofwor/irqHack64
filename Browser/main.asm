@@ -16,8 +16,8 @@ SIMULATION = 1 			;0 to compile for read cartrige
 	!src "initialize.asm"
 
 main:
-	!src "show_logo.asm"
-	!src "controls.asm"
+	!src "showLogo.asm"
+	!src "menuControls.asm"
 	jsr musicPlay
 
 

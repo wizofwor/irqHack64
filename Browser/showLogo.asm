@@ -18,7 +18,7 @@
 	;***********  color wash effect ******************
 	inc spColorWashCounter
 	lda spColorWashCounter
-	cmp #64
+	cmp #128
 	bne +
 	lda #00
 	sta spColorWashCounter
