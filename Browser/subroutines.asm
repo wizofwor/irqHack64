@@ -3,8 +3,11 @@
 ;###############################################################################
 
 !zone printPage { 	
-;Prints the initial filenames that's added to the program by the micro.
-printPage: 
+
+	;Prints the initial filenames that's added to the program by the micro.
+
+printPage:
+
 	LDX #COMMANDENTERMASK
 	STX COMMANDBYTE
 	;Onceki sayfanin icerigi temizlensin diye default 20'ye set ettim - nejat
@@ -58,9 +61,13 @@ printPage:
 }
 
 ;-------------------------------------------------------
+
 !zone enter {
-;Launches the selected item	
 enter:
+	;Launches the selected item	
+
+!if SIMULATION <> 1 {
+	
 	;Transfer starts with the lowest bit
 	lda #$00
 	sta BITPOS
@@ -169,16 +176,56 @@ WAITNMI
 	;jmp INPUT_GET
   	
  	rts	
-}
+
+} else {
+	;simulation mode when cartridge is not available
+	!set PC = *	
+	* = numberOfItems
+	!by 20
+
+	* = numberOfPages
+	!by 5
+
+	* = PAGEINDEX
+	!by 1
+
+	* = itemList
+	!scr "menu item 01 ..................."
+	!scr "menu item 02 ..................."
+	!scr "menu item 03 ..................."
+	!scr "menu item 04 ..................."
+	!scr "menu item 05 ..................."
+	!scr "menu item 06 ..................."
+	!scr "menu item 07 ..................."
+	!scr "menu item 08 ..................."
+	!scr "menu item 09 ..................."
+	!scr "menu item 10 ..................."
+	!scr "menu item 11 ..................."
+	!scr "menu item 12 ..................."
+	!scr "menu item 13 ..................."
+	!scr "menu item 14 ..................."
+	!scr "menu item 15 ..................."
+	!scr "menu item 16 ..................."
+	!scr "menu item 17 ..................."
+	!scr "menu item 18 ..................."
+	!scr "menu item 19 ..................."
+	!scr "menu item 20 ..................."	
+	* = PC
+
+};end of else if
 
 COMMANDBYTE !by 0
 BITPOS !by 0
+
+};end of zone
+
 ;-------------------------------------------------------
 ;IRQ Handlers
 ;-------------------------------------------------------
 ; Use IRQ as a covert channel to send selected file information
 ; Arduino has attached an interrupt on it's end 
 ; It will measure time between falling edges of IRQ
+
 IRQHANDLER1
 	SEI	
 	INC $D020	
@@ -189,6 +236,7 @@ IRQHANDLER1
 	BEQ FINISHSENDING1
 	INC BITPOS
 	INY 
+
 SHIFTBYTE1	
 	LSR			;Move rightmost bit right moving it to carry
 	DEY
@@ -215,8 +263,11 @@ SHIFTBYTE1
 	TAX
 	PLA 
 	RTI
+
 ;-------------------------------------------------------
+
 IRQHANDLE1CONT	
+
 	LDA #$7F
 	AND $D011
 	STA $D011 
@@ -233,7 +284,9 @@ IRQHANDLE1CONT
 	PLA 
 	RTI	
 ;-------------------------------------------------------
+
 FINISHSENDING1
+
 	LDA #$64
 	STA BITTARGET		; Break foreground wait
 	
@@ -248,8 +301,11 @@ FINISHSENDING1
 	TAX
 	PLA 
 	RTI
+
 ;-------------------------------------------------------
+
 IRQHANDLER2
+
 	SEI
 	INC $D020	
 	ASL $D019	;Acknowledge interrupt
@@ -259,7 +315,9 @@ IRQHANDLER2
 	BEQ FINISHSENDING2
 	INC BITPOS
 	INY 
+
 SHIFTBYTE2	
+
 	LSR			;Move rightmost bit right moving it to carry
 	DEY
 	BNE SHIFTBYTE2
@@ -285,7 +343,9 @@ SHIFTBYTE2
 	TAX
 	PLA 
 	RTI	
+
 ;-------------------------------------------------------
+
 FINISHSENDING2
 	
 	LDA #$64
@@ -301,8 +361,11 @@ FINISHSENDING2
 	TAX
 	PLA 
 	RTI		
+
 ;-------------------------------------------------------
+
 IRQHANDLE2CONT	
+
 	LDA #$7F
 	AND $D011
 	STA $D011 
@@ -323,30 +386,41 @@ IRQHANDLE2CONT
 ;-------------------------------------------------------
 ;Other Subs
 ;-------------------------------------------------------
+
 killCIA
+
 	LDY #$7f    ; $7f = %01111111 
-    	STY $dc0d   ; Turn off CIAs Timer interrupts 
-    	STY $dd0d   ; Turn off CIAs Timer interrupts 
-    	LDA $dc0d   ; cancel all CIA-IRQs in queue/unprocessed 
-    	LDA $dd0d   ; cancel all CIA-IRQs in queue/unprocessed 
+	STY $dc0d   ; Turn off CIAs Timer interrupts 
+	STY $dd0d   ; Turn off CIAs Timer interrupts 
+	LDA $dc0d   ; cancel all CIA-IRQs in queue/unprocessed 
+	LDA $dd0d   ; cancel all CIA-IRQs in queue/unprocessed 
 	RTS	
+
+;-------------------------------------------------------	
 
 DISABLEINTERRUPTS
-    	LDY #$7f    			; $7f = %01111111 
-    	STY $dc0d   			; Turn off CIAs Timer interrupts 
-    	STY $dd0d  				; Turn off CIAs Timer interrupts 
-    	LDA $dc0d  				; cancel all CIA-IRQs in queue/unprocessed 
-    	LDA $dd0d   			; cancel all CIA-IRQs in queue/unprocessed 
-    	;Change interrupt routines
-    	ASL $D019
-    	LDA #$00
-    	STA $D01A
-    	RTS
-GETCURRENTROW	; Input : None, Output : X (current row)
-	LDX ACTIVE_ITEM
+
+	LDY #$7f    			; $7f = %01111111 
+	STY $dc0d   			; Turn off CIAs Timer interrupts 
+	STY $dd0d  				; Turn off CIAs Timer interrupts 
+	LDA $dc0d  				; cancel all CIA-IRQs in queue/unprocessed 
+	LDA $dd0d   			; cancel all CIA-IRQs in queue/unprocessed 
+	;Change interrupt routines
+	ASL $D019
+	LDA #$00
+	STA $D01A
+	RTS
+
+;-------------------------------------------------------	
+
+GETCURRENTROW				; Input : None, Output : X (current row)
+	LDX activeMenuItem
 	RTS	
 
+;-------------------------------------------------------
+
 SETUPTRANSFER	
+
 	JSR DISABLEINTERRUPTS
 	JSR DISABLEDISPLAY
 	LDA #$37
@@ -364,7 +438,10 @@ SETUPTRANSFER
    	;JSR WAITLINE   	
 	RTS
 
+;-------------------------------------------------------
+
 WAITLINE   	
+
    	LDA #$80
    	CMP $D012
    	BNE WAITLINE
@@ -380,7 +457,10 @@ CONSUME
 	BNE CONSUME		
 	RTS
 
+;-------------------------------------------------------
+
 INITTRANSVAR
+
 	LDA #<MICROLOADSTART
 	STA DATA_LOW
 	STA ACTUAL_LOW
@@ -393,22 +473,30 @@ INITTRANSVAR
 	LDY #$00
 	RTS
 
+;-------------------------------------------------------
+
 ENDTRANSFER
+
 	LDA #<ROMNMIHANDLER
 	STA SOFTNMIVECTOR
 	LDA #>ROMNMIHANDLER
 	STA SOFTNMIVECTOR+1
 	RTS
-		
+
+;-------------------------------------------------------		
 
 DISABLEDISPLAY
+
 	LDA #$00
 	STA $D015				;Disable sprites
 	LDA #$0B				;%00001011 ; Disable VIC display until the end of transfer
 	STA $D011	
 	RTS
 
+;-------------------------------------------------------
+
 ENABLEDISPLAY
+
 	LDA #$FF
 	STA $D015				;Enable sprites
 	LDA #$1B				;%00001011 ; Disable VIC display until the end of transfer

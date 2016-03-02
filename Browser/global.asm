@@ -32,8 +32,8 @@ MICROLOADSTART	= numberOfItems
 ;============================================================================
 spAnimationCounter = $10
 spColorWashCounter = $11
-ACTIVE_ITEM   	= $12 	;Selected row's number
-ACTIVE_ROW 	  	= $14 	;Selected row's first color ram address
+activeMenuItem  = $12 	;Selected row's number
+activeMenuItemAddr = $14 	;Selected row's first color ram address
 ;           	= $15   ;hi byte for active row's color ram addres
 RESERVED 	  	= $05 	;Not used
 
@@ -61,6 +61,10 @@ ACTUAL_HIGH   	= $08
 ;Zero page addresses used to access file names
 ;NAMELOW	  		= $FD
 ;NAMEHIGH  		= $FE
+
+
+;CONSTANTS
+;============================================================================
 
 ;Loader on the cartridge rom sets the 6th bit of this location. Which is tested by BIT $64
 ;command and waiting if overflow flag (which is the 6th bit of this location) is clear.

@@ -1,8 +1,6 @@
 ;--------------------------------------------------
 ; SET SCREEN
 ;--------------------------------------------------
-	;+CLEAR_SCREEN
-
 	;set colors
 	lda #$00	;Set border
 	sta $d020
@@ -37,7 +35,7 @@
 	sta $d016
 
 	
-!zone memCopy {		;copy initial screen values
+!zone initialScreenValues {		;copy initial screen values
 .fetchNewData:
 	;***read***
 	.fetchPointer1=*+1 	;read repeat value 
@@ -107,11 +105,11 @@
 
 	;***initialize color wash effect for active menu item
 	lda #00
-	sta ACTIVE_ITEM
+	sta activeMenuItem
 	lda #<COLOR_RAM+120
-	sta ACTIVE_ROW
+	sta activeMenuItemAddr
 	lda #>COLOR_RAM+120
-	sta ACTIVE_ROW+1
+	sta activeMenuItemAddr+1
 
 
 ;--------------------------------------------------
@@ -174,7 +172,6 @@
 ;--------------------------------------------------
 ; INITIAL WAIT BEFORE REQUESTING FILE LIST
 ;--------------------------------------------------
-!if SIMULATION <> 1 {
 	;Buradaki döngü mantýðý show_logo içine yedirilirse logo'yu da gösterebiliriz açýlýþta.
 	;Mantýk olarak ekranda gösterilecek yazý vesaire için bir süre býrakmak için.
 	;Arduino da yarým saniye kadar menüyü gönderdikten sonra bekliyor. (Niye koyduðumu hatýrlayamadým þimdi.)
@@ -193,38 +190,5 @@
 	
 	LDA #COMMANDINIT
 	STA COMMANDBYTE
+	
 	JMP enter
-} else {
-	!set PC = *	
-	* = numberOfItems
-	!by 20
-
-	* = numberOfPages
-	!by 5
-
-	* = PAGEINDEX
-	!by 1
-
-	* = itemList
-	!scr "menu item 01 ..................."
-	!scr "menu item 02 ..................."
-	!scr "menu item 03 ..................."
-	!scr "menu item 04 ..................."
-	!scr "menu item 05 ..................."
-	!scr "menu item 06 ..................."
-	!scr "menu item 07 ..................."
-	!scr "menu item 08 ..................."
-	!scr "menu item 09 ..................."
-	!scr "menu item 10 ..................."
-	!scr "menu item 11 ..................."
-	!scr "menu item 12 ..................."
-	!scr "menu item 13 ..................."
-	!scr "menu item 14 ..................."
-	!scr "menu item 15 ..................."
-	!scr "menu item 16 ..................."
-	!scr "menu item 17 ..................."
-	!scr "menu item 18 ..................."
-	!scr "menu item 19 ..................."
-	!scr "menu item 20 ..................."	
-	* = PC
-	}	

@@ -3,6 +3,9 @@
 ;============================================================================
 
 !macro SET_START .address {
+
+	;Inject SYS .addres in BASIC memory
+
 	* = $0801
 	
 	!byte $0c,$08,$0a,$00,$9e 	; 10SYS
@@ -17,9 +20,11 @@
 }
 
 !macro CLEAR_SCREEN {
+	
 	ldx #00
 	lda #$20
-.loop	sta SCREEN_RAM,x
+.loop:
+	sta SCREEN_RAM,x
 	sta SCREEN_RAM+255,x
 	sta SCREEN_RAM+510,x
 	sta SCREEN_RAM+765,x
@@ -29,6 +34,8 @@
 }
 
 !macro inc16 .address{
+
+	;16bit unsigned increase
 	inc .address
 	bne *+5
 	inc .address+1

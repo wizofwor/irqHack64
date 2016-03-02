@@ -9,6 +9,7 @@ SIMULATION = 1 			;0 to compile for read cartrige
 
 !src "standart.asm" 	;standard macros & kernal adresses definition 
 !src "global.asm" 		;global labels & zp adresses
+
 ;--------------------------------------------------------------------------------
 
 +SET_START $0900
@@ -16,7 +17,7 @@ SIMULATION = 1 			;0 to compile for read cartrige
 	!src "initialize.asm"
 
 main:
-	!src "showLogo.asm"
+	!src "updateLogo.asm" 	;sprite logo animation
 	!src "menuControls.asm"
 	jsr musicPlay
 
@@ -24,5 +25,6 @@ main:
 jmp main
 
 ;--------------------------------------------------------------------------------
+
 !src "subroutines.asm"
 !src "data.asm"

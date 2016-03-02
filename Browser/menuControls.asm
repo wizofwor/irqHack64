@@ -4,6 +4,9 @@
 ;##############################################################################
 
 !zone keyboardScan {
+
+.keyboardScan:
+
 	jsr SCNKEY		; Call kernal's key scan routine
  	jsr GETIN		; Get the pressed key by the kernal routine
  	cmp #$2d 		; IF char is '-'
@@ -20,13 +23,14 @@
     ;beq .simulation ; Display simulation menu
  	jmp .end
 
-.nextPage
+.nextPage:
+
 	ldx PAGEINDEX
 	cpx numberOfPages	  	
 	bcc .execNext	;BLT
 	jmp .end
 	
-.execNext
+.execNext:
 
 	inc PAGEINDEX
 	ldx #COMMANDNEXTPAGE
@@ -34,11 +38,13 @@
 	jmp j1
 	
 .prevPage
+
 	ldx PAGEINDEX
 	bne .execPrev
 	jmp .end
 	
 .execPrev
+
 	dec PAGEINDEX
 	ldx #COMMANDPREVPAGE
 	stx COMMANDBYTE	
@@ -46,51 +52,53 @@
 j1: jmp enter
 
 .down
+
 	;clear old coloring
 	ldy #22
 	lda #$0f
--	sta (ACTIVE_ROW),y
+-	sta (activeMenuItemAddr),y
 	dey
 	bne -
 
 	;increment ACTIVE_ITEM
 	ldx numberOfItems 	;check if the cursor is
 	dex 				;already at end of page
-	cpx ACTIVE_ITEM 	
+	cpx activeMenuItem 	
 	beq .end
-	inc ACTIVE_ITEM
+	inc activeMenuItem
 
 	clc
-	lda ACTIVE_ROW
+	lda activeMenuItemAddr
 	adc #40
-	sta ACTIVE_ROW
-	lda ACTIVE_ROW+1
+	sta activeMenuItemAddr
+	lda activeMenuItemAddr+1
 	adc #00
-	sta ACTIVE_ROW+1
+	sta activeMenuItemAddr+1
 
 	jmp .end
 
 .up
+
 	;clear old coloring
 	ldy #22
 	lda #$0f
--	sta (ACTIVE_ROW),y
+-	sta (activeMenuItemAddr),y
 	dey
 	bne -
 
 	;decrement ACTIVE_ITEM
 	lda #00 			;check if the cursor is
-	cmp ACTIVE_ITEM 	;already at end of page
+	cmp activeMenuItem 	;already at end of page
 	beq .end
-	dec ACTIVE_ITEM
+	dec activeMenuItem
 
 	sec
-	lda ACTIVE_ROW
+	lda activeMenuItemAddr
 	sbc #40
-	sta ACTIVE_ROW
-	lda ACTIVE_ROW+1
+	sta activeMenuItemAddr
+	lda activeMenuItemAddr+1
 	sbc #00
-	sta ACTIVE_ROW+1
+	sta activeMenuItemAddr+1
 
 	jmp .end 	
 
@@ -101,7 +109,7 @@ j1: jmp enter
 !zone colorwash {
 	ldy #22
 	lda #$07
--	sta (ACTIVE_ROW),y
+-	sta (activeMenuItemAddr),y
 	dey
 	bne -
 }
