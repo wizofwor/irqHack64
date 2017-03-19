@@ -1,19 +1,19 @@
-;###############################################################################
-; SUBROUTINES
-;###############################################################################
+; subroutines
+
+; ===============================================================================
+; printPage
+; 	Prints the initial filenames that's added to the program by the micro.
+; ===============================================================================
 
 !zone printPage { 	
-
-	;Prints the initial filenames that's added to the program by the micro.
-
 printPage:
 
 	LDX #COMMANDENTERMASK
 	STX COMMANDBYTE
 	;Onceki sayfanin icerigi temizlensin diye default 20'ye set ettim - nejat
 	;ldx numberOfItems
-	ldx #20
---	ldy #20
+	ldx #18
+--	ldy #18
 	.fetchPointer=*+1
 -	lda itemList-1,y
 	;petscii -> screen code - nejat
@@ -23,7 +23,7 @@ printPage:
 	sbc #$3f
 +
 	.fillPointer=*+1
-	sta SCREEN_RAM+121,y
+	sta SCREEN_RAM+201,y
 
 	dey
 	bne -
@@ -47,7 +47,7 @@ printPage:
 	dex
 	bne --
 
-	;Self modify ile deðiþmiþ adresleri tekrar init - nejat
+	;Self modify ile degismis adresleri tekrar init - nejat
 	lda #<itemList-1
 	sta .fetchPointer
 	lda #>itemList-1
@@ -60,11 +60,12 @@ printPage:
 	rts
 }
 
-;-------------------------------------------------------
-
+; ===============================================================================
+; enter
+; 	Launches the selected item
+; ===============================================================================
 !zone enter {
 enter:
-	;Launches the selected item	
 
 !if SIMULATION <> 1 {
 	
@@ -181,7 +182,7 @@ WAITNMI
 	;simulation mode when cartridge is not available
 	!set PC = *	
 	* = numberOfItems
-	!by 20
+	!by 18
 
 	* = numberOfPages
 	!by 5
@@ -208,8 +209,6 @@ WAITNMI
 	!scr "menu item 16 ..................."
 	!scr "menu item 17 ..................."
 	!scr "menu item 18 ..................."
-	!scr "menu item 19 ..................."
-	!scr "menu item 20 ..................."	
 	* = PC
 
 };end of else if
@@ -219,12 +218,12 @@ BITPOS !by 0
 
 };end of zone
 
-;-------------------------------------------------------
-;IRQ Handlers
-;-------------------------------------------------------
-; Use IRQ as a covert channel to send selected file information
-; Arduino has attached an interrupt on it's end 
-; It will measure time between falling edges of IRQ
+; ===============================================================================
+; IRQ Handlers
+; 	Use IRQ as a covert channel to send selected file information
+; 	Arduino has attached an interrupt on it's end 
+; 	It will measure time between falling edges of IRQ
+; ===============================================================================
 
 IRQHANDLER1
 	SEI	
@@ -383,9 +382,9 @@ IRQHANDLE2CONT
 	PLA 
 	RTI		
 
-;-------------------------------------------------------
-;Other Subs
-;-------------------------------------------------------
+; ===============================================================================
+; Other Subs
+; ===============================================================================
 
 killCIA
 

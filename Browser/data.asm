@@ -3,25 +3,29 @@
 ;-------------------------------------------------------
 
 repeat_bytes:
+
+!by $50
 !by $01,$17,$01,$0f
 !by $01,$17,$01,$0f
 !by $01,$16,$01,$01,$0f
-!for n,1,21 {!by $01,$16,$01,$01,$0f}
+!for n,2,20 {!by $01,$16,$01,$01,$0f}
 !by $01,$17,$01,$0F
 !by $00
 
 char_bytes:
+!by $00
 !by $40,$41,$42,$00
 !by $43,$53,$44,$00
 !by $45,$49,$4a,$46,$00
-!for n,1,21 {!by $47,$20,$4b,$48,$00}
+!for n,2,20 {!by $47,$20,$4b,$48,$00}
 !by $50,$51,$52,$00
 
 color_bytes:
+!by $00
 !by $01,$0d,$01,$00
 !by $0d,$05,$0d,$00
 !by $0d,$0f,$0b,$0d,$00
-!for n,1,21 {!by $0d,$0f,$0b,$0d,$00}
+!for n,2,20 {!by $0d,$0f,$0b,$0d,$00}
 !by $05,$0d,$0d,$00,$00
 
 * = $3000 ;walkaround for is segment override problem 
@@ -75,7 +79,7 @@ spriteBase:
 !bin "resources/sprites.bin",1536
 
 * = music
-!bin "resources/Jamaica_10_intro.sid",3167,$7c+2
+!bin "resources/Jamaica_10_intro.sid",3167-($7c+2),$7c+2
 
 * = $2800
 charset_data:
