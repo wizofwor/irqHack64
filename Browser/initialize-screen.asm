@@ -108,9 +108,11 @@
 }
 
 ; Print title
+	TITLE_BEGIN = SCREEN_RAM+43
+
 	ldx #00
 -	lda title,x
-	sta SCREEN_RAM+121,x
+	sta TITLE_BEGIN,x
 	inx
 	cpx #16
 	bne -
@@ -119,16 +121,16 @@
 
 	lda #00
 	sta activeMenuItem
-	lda #<COLOR_RAM+200
+	lda #<COLOR_RAM+162
 	sta activeMenuItemAddr
-	lda #>COLOR_RAM+200
+	lda #>COLOR_RAM+162
 	sta activeMenuItemAddr+1
 
 
 ; Set Sprites
 
-	lda #$ff	
-	sta $d015	;enable all sprites
+	lda #%00000111	
+	sta $d015	;enable Sprite0,1,2
 	sta $d01c	;enable multicolor for all
 
 	lda #$00	;undo sprite extend
@@ -147,11 +149,18 @@
 	dex
 	bne -
 
-	lda #%11101110
+	lda #%00000000
 	sta $d010	;sprite-x in second page
 
 	lda #$00
 	sta spAnimationCounter
+
+	lda #spriteBase/$40 ;set sprite pointers
+	sta $07f8
+	lda #spriteBase/$40+1
+	sta $07f9
+	lda #spriteBase/$40+2
+	sta $07fa
 
 ; Initialize Music
 

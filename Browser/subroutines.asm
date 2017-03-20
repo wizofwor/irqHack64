@@ -7,7 +7,8 @@
 
 !zone printPage { 	
 printPage:
-
+	PAGE_START = SCREEN_RAM+123 ; Beggining adress for the list print
+	
 	LDX #COMMANDENTERMASK
 	STX COMMANDBYTE
 	;Onceki sayfanin icerigi temizlensin diye default 20'ye set ettim - nejat
@@ -23,7 +24,7 @@ printPage:
 	sbc #$3f
 +
 	.fillPointer=*+1
-	sta SCREEN_RAM+201,y
+	sta PAGE_START,y
 
 	dey
 	bne -
@@ -53,9 +54,9 @@ printPage:
 	lda #>itemList-1
 	sta .fetchPointer+1
 	
-	lda #<SCREEN_RAM+121
+	lda #<PAGE_START
 	sta .fillPointer
-	lda #>SCREEN_RAM+121
+	lda #>PAGE_START
 	sta .fillPointer+1
 	rts
 }

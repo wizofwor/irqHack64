@@ -32,7 +32,7 @@ MICROLOADSTART	= numberOfItems
 ;============================================================================
 spAnimationCounter = $10
 spColorWashCounter = $11
-activeMenuItem  = $12 	;Selected row's number
+activeMenuItem  = $12 		;Selected row's number
 activeMenuItemAddr = $14 	;Selected row's first color ram address
 ;           	= $15   ;hi byte for active row's color ram addres
 RESERVED 	  	= $05 	;Not used

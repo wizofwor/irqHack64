@@ -4,11 +4,11 @@
 ;###############################################################################
 	!to "build/menu.prg",cbm
 
-	SIMULATION = 1 			;0 to compile for read cartrige
-							;1 to compile with simulation routines
+	SIMULATION = 1 		;0 to compile for read cartrige
+				;1 to compile with simulation routines
 
 	!src "standart.asm" 	;standard macros & kernal adresses definition 
-	!src "global.asm" 		;global labels & zp adresses
+	!src "global.asm" 	;global labels & zp adresses
 
 ; --- Main / Start
 
@@ -17,7 +17,7 @@
 	!src "initialize-screen.asm"
 
 loop:
-	!src "updateLogo.asm" 	;sprite logo animation
+	jsr updateLogo 		;sprite logo animation
 	!src "menuControls.asm"
 	jsr musicPlay
 
@@ -25,5 +25,6 @@ loop:
 
 ; --- Main / End
 
+!src "updateLogo.asm"
 !src "subroutines.asm"
 !src "data.asm"
