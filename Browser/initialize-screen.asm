@@ -1,7 +1,9 @@
-;------------------------------------------------------------------------------
-; Initialize Screen
-;------------------------------------------------------------------------------
-
+;===============================================================================
+; screen.asm
+; Screen Initialization Routines
+; !NOTE: NON REALATED CODE SHOULD BE MOVED SOMEWHERE 
+;===============================================================================
+initializeScreen:
 ; Initial Wait Before Requesting file list
 ;		Buradaki döngü mantýðý show_logo içine yedirilirse logo'yu da gösterebiliriz açýlýþta.
 ;		Mantýk olarak ekranda gösterilecek yazý vesaire için bir süre býrakmak için.
@@ -117,15 +119,6 @@
 	cpx #16
 	bne -
 
-; Initialize the Colorwash effect for active menu item
-
-	lda #00
-	sta activeMenuItem
-	lda #<COLOR_RAM+162
-	sta activeMenuItemAddr
-	lda #>COLOR_RAM+162
-	sta activeMenuItemAddr+1
-
 ; Initialize Music
 
 	lda #$00
@@ -147,7 +140,6 @@
 
 	;cli
 	
-
 ; Get File List 
 	!if SIMULATION = 0 {	
 	lda #COMMANDINIT
@@ -157,3 +149,5 @@
 	} ELSE {
 	jsr printPage
 	}
+
+rts	

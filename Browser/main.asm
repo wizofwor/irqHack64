@@ -16,18 +16,21 @@ SIMULATION = 1 		;0 to compile for read cartrige
 
 ; Initialize 
 
-	!src "initialize-screen.asm"
+	jsr initializeScreen
+	jsr initializeMenu
 	jsr initializeLogo
 
 loop:
 	jsr updateLogo 		;sprite logo animation
-	!src "menuControls.asm"
+	jsr menuControls
 	jsr musicPlay
 
 	jmp loop
 
 ; --- Main / End
 
+!src "initialize-screen.asm"
 !src "logo.asm"
+!src "menuControls.asm"
 !src "subroutines.asm"
 !src "data.asm"
