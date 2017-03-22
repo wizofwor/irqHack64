@@ -126,47 +126,10 @@
 	lda #>COLOR_RAM+162
 	sta activeMenuItemAddr+1
 
-
-; Set Sprites
-
-	lda #%00000111	
-	sta $d015	;enable Sprite0,1,2
-	sta $d01c	;enable multicolor for all
-
-	lda #$00	;undo sprite extend
-	sta $d017
-	sta $d01d
-
-	lda #$01 	;set sprite multicolor 1
-	sta $d025	
-
-	lda #$06 	;set sprite multicolor 2
-	sta $d026
-
-	ldx #$08	;set sprite colors
-	lda #$0e
--	sta $d026,x
-	dex
-	bne -
-
-	lda #%00000000
-	sta $d010	;sprite-x in second page
-
-	lda #$00
-	sta spAnimationCounter
-
-	lda #spriteBase/$40 ;set sprite pointers
-	sta $07f8
-	lda #spriteBase/$40+1
-	sta $07f9
-	lda #spriteBase/$40+2
-	sta $07fa
-
 ; Initialize Music
 
 	lda #$00
 	jsr music 		;initilize music
-
 
 ; Set Interrupt Handlers
 
